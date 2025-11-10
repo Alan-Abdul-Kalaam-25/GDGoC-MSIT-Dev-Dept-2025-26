@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiRequest from "../utils/api";
 
 export default function LoginForm({ onAuth, initialMode = "login" }) {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ export default function LoginForm({ onAuth, initialMode = "login" }) {
               password,
             };
 
-      const res = await fetch(url, {
+      const res = await apiRequest(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

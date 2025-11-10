@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { usePageTitle } from "../hooks/usePageTitle";
+import apiRequest from "../utils/api";
 
 export default function SettingsPage() {
   usePageTitle("Settings - Customize Your Experience");
@@ -26,7 +27,7 @@ export default function SettingsPage() {
       }
 
       try {
-        const response = await fetch("/api/user/settings", {
+        const response = await apiRequest("/api/user/settings", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {
@@ -56,7 +57,7 @@ export default function SettingsPage() {
     if (!token) return;
 
     try {
-      const response = await fetch("/api/user/settings", {
+      const response = await apiRequest("/api/user/settings", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +101,7 @@ export default function SettingsPage() {
     if (!token) return;
 
     try {
-      const response = await fetch("/api/user/settings", {
+      const response = await apiRequest("/api/user/settings", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { usePageTitle } from "../hooks/usePageTitle";
+import apiRequest from "../utils/api";
 
 export default function ProfilePage({ user, onUpdateUser }) {
   usePageTitle("My Profile - Account Settings");
@@ -21,7 +22,7 @@ export default function ProfilePage({ user, onUpdateUser }) {
       if (!token) return;
 
       try {
-        const response = await fetch("/api/user/stats", {
+        const response = await apiRequest("/api/user/stats", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {
@@ -53,7 +54,7 @@ export default function ProfilePage({ user, onUpdateUser }) {
     }
 
     try {
-      const response = await fetch("/api/user/profile", {
+      const response = await apiRequest("/api/user/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

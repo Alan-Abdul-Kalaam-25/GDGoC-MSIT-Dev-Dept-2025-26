@@ -16,6 +16,7 @@ import TaskForm from "./components/TaskForm";
 import TaskItem from "./components/TaskItem";
 import TwistsPanel from "./components/TwistsPanel";
 import LoginForm from "./components/LoginForm";
+import apiRequest from "./utils/api";
 
 function calcLevel(xp) {
   return Math.floor(Math.sqrt(xp / 10)) + 1;
@@ -51,7 +52,7 @@ function App() {
     // Verify token validity by fetching user profile first
     const verifyToken = async () => {
       try {
-        const profileRes = await fetch("/api/user/profile", {
+        const profileRes = await apiRequest("/api/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -83,7 +84,9 @@ function App() {
         });
 
         // Fetch tasks
-        fetch("/api/tasks", { headers: { Authorization: `Bearer ${token}` } })
+        apiRequest("/api/tasks", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
           .then((r) => {
             if (!r.ok) throw new Error("Failed to fetch tasks");
             return r.json();
@@ -95,7 +98,9 @@ function App() {
           });
 
         // Fetch lists
-        fetch("/api/lists", { headers: { Authorization: `Bearer ${token}` } })
+        apiRequest("/api/lists", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
           .then((r) => {
             if (!r.ok) throw new Error("Failed to fetch lists");
             return r.json();
@@ -125,7 +130,7 @@ function App() {
   const addTask = async (task, extraData = {}) => {
     if (!token) return alert("Please login");
     try {
-      const res = await fetch("/api/tasks", {
+      const res = await apiRequest("/api/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -149,7 +154,7 @@ function App() {
 
   const editTask = async (id, text) => {
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await apiRequest(`/api/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -168,7 +173,7 @@ function App() {
   const deleteTask = async (id) => {
     if (!token) return;
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await apiRequest(`/api/tasks/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -187,7 +192,7 @@ function App() {
     if (!existing) return;
     const nowCompleted = !existing.completed;
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await apiRequest(`/api/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -217,7 +222,7 @@ function App() {
   const createList = async (name) => {
     if (!token) return alert("Please login");
     try {
-      const res = await fetch("/api/lists", {
+      const res = await apiRequest("/api/lists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -239,7 +244,7 @@ function App() {
   const deleteList = async (id) => {
     if (!token) return;
     try {
-      const res = await fetch(`/api/lists/${id}`, {
+      const res = await apiRequest(`/api/lists/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -259,7 +264,7 @@ function App() {
     const task = tasks.find((t) => t._id === taskId);
     if (!task) return;
 
-    const res = await fetch(`/api/tasks/${taskId}`, {
+    const res = await apiRequest(`/api/tasks/${taskId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
