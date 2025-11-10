@@ -51,6 +51,14 @@ mongoose
         console.error(`Port ${PORT} is already in use`);
       }
     });
+
+    // Confirm server is listening
+    server.on("listening", () => {
+      const addr = server.address();
+      console.log(
+        `✅ HTTP server successfully bound to ${addr.address}:${addr.port}`
+      );
+    });
   })
   .catch((error) => {
     console.error("❌ MongoDB connection error:", error);
