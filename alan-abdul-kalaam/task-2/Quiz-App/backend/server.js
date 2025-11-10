@@ -5,12 +5,20 @@ import cors from "cors";
 import quizRoutes from "./routes/quizRoutes.js";
 import userStatsRoutes from "./routes/userStatsRoutes.js";
 
+// Load .env file only if it exists (local development)
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+// Render provides PORT via environment, fallback to 10000 (Render's typical default)
+const PORT = process.env.PORT || 10000;
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/quiz-app";
+
+// Debug logging for Render
+console.log("🔍 Environment Check:");
+console.log("PORT from env:", process.env.PORT);
+console.log("PORT to use:", PORT);
+console.log("NODE_ENV:", process.env.NODE_ENV);
 
 // Middleware
 app.use(cors());
@@ -30,8 +38,18 @@ mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log("✅ Connected to MongoDB");
-    app.listen(PORT, "0.0.0.0", () => {
+    // Listen on all interfaces (0.0.0.0) for Render
+    const server = app.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server is running on port ${PORT}`);
+      console.log(`📍 Listening on 0.0.0.0:${PORT}`);
+    });
+
+    // Handle server errors
+    server.on("error", (error) => {
+      console.error("❌ Server error:", error);
+      if (error.code === "EADDRINUSE") {
+        console.error(`Port ${PORT} is already in use`);
+      }
     });
   })
   .catch((error) => {
