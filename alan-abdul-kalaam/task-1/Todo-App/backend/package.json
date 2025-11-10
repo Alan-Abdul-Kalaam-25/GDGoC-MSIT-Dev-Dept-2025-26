@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.0.1",
-  "description": "",
+  "description": "The backend server for the todo app",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",

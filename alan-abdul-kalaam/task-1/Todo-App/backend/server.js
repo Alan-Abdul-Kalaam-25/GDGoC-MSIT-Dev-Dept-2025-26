@@ -17,7 +17,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 4000;
 
 async function start() {
-  const mongo = process.env.MONGO_URI || "mongodb://localhost:27017/todos_app";
+  const mongo = process.env.MONGO_URI;
   await mongoose.connect(mongo);
   console.log("Connected to MongoDB");
 
